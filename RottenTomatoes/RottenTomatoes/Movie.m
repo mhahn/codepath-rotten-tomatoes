@@ -21,12 +21,9 @@
     return self;
 }
 
-// XXX is this __autoreleasing neccessary?
-+ (NSArray *)moviesFromJSON:(NSData *)moviesJSON error:(NSError *__autoreleasing *)error {
-    id object = [NSJSONSerialization JSONObjectWithData:moviesJSON options:0 error:nil];
-
++ (NSArray *)moviesFromArrayOfDictionaries:(NSArray *)movieDicts {
     NSArray *movies = [NSArray array];
-    for (NSDictionary *movieData in object[@"movies"]) {
+    for (NSDictionary *movieData in movieDicts) {
         Movie *movie = [[Movie alloc] initWithMovieData:movieData];
         movies = [movies arrayByAddingObject:movie];
     }

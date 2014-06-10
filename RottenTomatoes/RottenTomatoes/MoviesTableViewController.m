@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Michael Hahn. All rights reserved.
 //
 
+#import "AFNetworking.h"
 #import "ProgressHUD.h"
 
 #import "MoviesTableViewController.h"
@@ -22,6 +23,7 @@
 
 - (void)handleConnectionError:(NSError *)error;
 - (void)fetchData:(id)sender;
+- (void)finishFetching:(id)sender;
 
 @end
 
@@ -113,29 +115,36 @@
 
 }
 
+- (void)finishFetching:(id)sender {
+    [ProgressHUD dismiss];
+    if (sender) {
+        [(UIRefreshControl *)sender endRefreshing];
+    }
+}
+
 - (void)fetchData:(id)sender {
     NSString *url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=g9au4hv6khv6wzvzgt55gpqs";
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        if (connectionError) {
-            [self handleConnectionError:connectionError];
-        } else {
-            
-            // cleanup any network error
-            if (!networkErrorView.hidden) {
-                networkErrorView.hidden = YES;
-            }
-            
-            movies = [Movie moviesFromJSON:data error:nil];
-            [self.tableView reloadData];
-        }
-        [ProgressHUD dismiss];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:5.0];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    operation.responseSerializer = [AFJSONResponseSerializer serializer];
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        if (sender) {
-            [(UIRefreshControl *)sender endRefreshing];
+        // cleanup any previous network error]
+        if ([networkErrorView isDescendantOfView:self.view]) {
+            [networkErrorView removeFromSuperview];
         }
         
+        movies = [Movie moviesFromArrayOfDictionaries:responseObject[@"movies"]];
+        [self.tableView reloadData];
+        [self finishFetching:sender];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self handleConnectionError:error];
+        [self finishFetching:sender];
     }];
+    
+    [operation start];
 }
 
 @end

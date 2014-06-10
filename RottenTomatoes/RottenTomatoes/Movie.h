@@ -16,6 +16,6 @@
 @property (nonatomic) NSDictionary *posters;
 
 - (id)initWithMovieData:(NSDictionary *)movieData;
-+ (NSArray *)moviesFromJSON:(NSData *)moviesJSON error:(NSError **)error;
++ (NSArray *)moviesFromArrayOfDictionaries:(NSArray *)movieDicts;
 
 @end

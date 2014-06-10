@@ -14,7 +14,12 @@
 #import "MovieViewController.h"
 
 
-@interface MoviesTableViewController ()
+@interface MoviesTableViewController () {
+    UIView *networkErrorView;
+    UILabel *networkErrorLabel;
+}
+
+- (void)handleConnectionError:(NSError *)error;
 
 @end
 
@@ -29,16 +34,18 @@
         NSString *url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=g9au4hv6khv6wzvzgt55gpqs";
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
         [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-            self.movies = [Movie moviesFromJSON:data error:nil];
+            if (connectionError) {
+                [self handleConnectionError:connectionError];
+            } else {
+                self.movies = [Movie moviesFromJSON:data error:nil];
+                [self.tableView reloadData];
+            }
             [ProgressHUD dismiss];
-            [self.tableView reloadData];
+            
         }];
 
     }
     return self;
-}
-
-- (void)fetchData {
 }
 
 - (void)viewDidLoad {
@@ -86,5 +93,29 @@
     // Push the view controller.
     [self.navigationController pushViewController:mvc animated:YES];
 }
+
+#pragma mark - Private Methods
+
+- (void)handleConnectionError:(NSError *)error {
+    
+    NSError *underlyingError = [[error userInfo] objectForKey:NSUnderlyingErrorKey];
+    
+    // configure the error view
+    networkErrorView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    networkErrorView.backgroundColor = [UIColor blackColor];
+    networkErrorView.alpha = .85;
+    
+    // configure the error label
+    networkErrorLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 300, 20)];
+    networkErrorLabel.text = [underlyingError localizedDescription];
+    [networkErrorLabel setTextColor:[UIColor whiteColor]];
+    [networkErrorLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0f]];
+    [networkErrorLabel setTextAlignment:NSTextAlignmentCenter];
+    
+    [networkErrorView addSubview:networkErrorLabel];
+    [self.view addSubview:networkErrorView];
+
+}
+
 
 @end

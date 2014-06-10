@@ -11,5 +11,6 @@
 @interface MoviesTableViewController : UITableViewController
 
 @property (nonatomic, strong) NSArray *movies;
+- (void)fetchData;
 
 @end

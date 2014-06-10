@@ -6,10 +6,13 @@
 //  Copyright (c) 2014 Michael Hahn. All rights reserved.
 //
 
+#import "ProgressHUD.h"
+
 #import "MoviesTableViewController.h"
 #import "Movie.h"
 #import "MovieTableViewCell.h"
 #import "MovieViewController.h"
+
 
 @interface MoviesTableViewController ()
 
@@ -22,24 +25,25 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.title = @"Movies";
-        
+
         NSString *url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=g9au4hv6khv6wzvzgt55gpqs";
-        
-        // should have a loading modal while this is happening
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
         [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-            // pass error through here if we want to report on it
             self.movies = [Movie moviesFromJSON:data error:nil];
+            [ProgressHUD dismiss];
             [self.tableView reloadData];
         }];
+
     }
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)fetchData {
+}
+
+- (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [ProgressHUD show:@"Loading..."];
     self.tableView.rowHeight = 150;
     self.tableView.dataSource = self;
     UINib *movieCellNib = [UINib nibWithNibName:@"MovieTableViewCell" bundle:nil];

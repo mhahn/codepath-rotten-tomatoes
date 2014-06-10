@@ -10,6 +10,4 @@
 
 @interface MoviesTableViewController : UITableViewController
 
-@property (nonatomic, strong) NSArray *movies;
-
 @end

@@ -17,40 +17,38 @@
 @interface MoviesTableViewController () {
     UIView *networkErrorView;
     UILabel *networkErrorLabel;
+    NSArray *movies;
 }
 
 - (void)handleConnectionError:(NSError *)error;
+- (void)fetchData:(id)sender;
 
 @end
 
 @implementation MoviesTableViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.title = @"Movies";
-
-        NSString *url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=g9au4hv6khv6wzvzgt55gpqs";
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-            if (connectionError) {
-                [self handleConnectionError:connectionError];
-            } else {
-                self.movies = [Movie moviesFromJSON:data error:nil];
-                [self.tableView reloadData];
-            }
-            [ProgressHUD dismiss];
-            
-        }];
-
     }
     return self;
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // Configure the refresh control
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(fetchData:) forControlEvents:UIControlEventValueChanged];
+    [self setRefreshControl:refreshControl];
+    
+    // Trigger the initial fetch of data
     [ProgressHUD show:@"Loading..."];
+    [self fetchData:nil];
+    
+    // Configure table cells
     self.tableView.rowHeight = 150;
     self.tableView.dataSource = self;
     UINib *movieCellNib = [UINib nibWithNibName:@"MovieTableViewCell" bundle:nil];
@@ -58,24 +56,22 @@
     
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return self.movies.count;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return movies.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MovieTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MovieCell" forIndexPath:indexPath];
     
     // XXX return the height here instead of setting a static height in viewDidLoad
-    cell.movie = self.movies[indexPath.row];
+    cell.movie = movies[indexPath.row];
     
     return cell;
 }
@@ -88,7 +84,7 @@
     MovieViewController *mvc = [[MovieViewController alloc]initWithNibName:@"MovieViewController" bundle:nil];
     
     // Pass the selected object to the new view controller.
-    mvc.movie = self.movies[indexPath.row];
+    mvc.movie = movies[indexPath.row];
     
     // Push the view controller.
     [self.navigationController pushViewController:mvc animated:YES];
@@ -117,5 +113,29 @@
 
 }
 
+- (void)fetchData:(id)sender {
+    NSString *url = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/top_rentals.json?apikey=g9au4hv6khv6wzvzgt55gpqs";
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        if (connectionError) {
+            [self handleConnectionError:connectionError];
+        } else {
+            
+            // cleanup any network error
+            if (!networkErrorView.hidden) {
+                networkErrorView.hidden = YES;
+            }
+            
+            movies = [Movie moviesFromJSON:data error:nil];
+            [self.tableView reloadData];
+        }
+        [ProgressHUD dismiss];
+        
+        if (sender) {
+            [(UIRefreshControl *)sender endRefreshing];
+        }
+        
+    }];
+}
 
 @end

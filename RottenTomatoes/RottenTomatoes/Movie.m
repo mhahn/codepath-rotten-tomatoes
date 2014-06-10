@@ -24,10 +24,10 @@
 // XXX is this __autoreleasing neccessary?
 + (NSArray *)moviesFromJSON:(NSData *)moviesJSON error:(NSError *__autoreleasing *)error {
     id object = [NSJSONSerialization JSONObjectWithData:moviesJSON options:0 error:nil];
-    NSArray *moviesData = object[@"movies"];
+
     NSArray *movies = [NSArray array];
-    for (int i; i < [moviesData count]; i++) {
-        Movie *movie = [[Movie alloc] initWithMovieData:moviesData[i]];
+    for (NSDictionary *movieData in object[@"movies"]) {
+        Movie *movie = [[Movie alloc] initWithMovieData:movieData];
         movies = [movies arrayByAddingObject:movie];
     }
     return movies;

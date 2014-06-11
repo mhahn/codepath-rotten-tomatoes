@@ -18,5 +18,6 @@ Which required and optional stories have you completed?
 - For the large poster, load the low-res image first, switch to high-res when complete (optional)
 - All images should be cached in memory and disk. In other words, images load immediately upon cold start (optional).
 
+GIF walkthrough of all required and optional stories:
 
 ![alt tag](rotten-tomatoes.gif)

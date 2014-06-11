@@ -7,7 +7,8 @@
 //
 
 #import "MovieViewController.h"
-#import "UIImageView+AFNetworking.h"
+#import "UIImageView+MHNetworking.h"
+
 
 @interface MovieViewController ()
 
@@ -42,8 +43,7 @@
     self.movieTitleLabel.text = _movie.title;
     self.movieSynopsisLabel.text = _movie.synopsis;
     [self.movieSynopsisLabel sizeToFit];
-    [self.movieBackgroundImageView setImageWithURL:[NSURL URLWithString:_movie.posters[@"original"]]];
-    
+    [self.movieBackgroundImageView setImageWithURL:[NSURL URLWithString:_movie.posters[@"original"]] withAnimationDuration:0.025];
 }
 
 - (void)didReceiveMemoryWarning {

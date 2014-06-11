@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF02C7151947DAD7000E6174 /* UIImageView+MHNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = BF02C7141947DAD7000E6174 /* UIImageView+MHNetworking.m */; };
 		BF16909E1946D68600ED2343 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF16909D1946D68600ED2343 /* Foundation.framework */; };
 		BF1690A01946D68600ED2343 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF16909F1946D68600ED2343 /* CoreGraphics.framework */; };
 		BF1690A21946D68600ED2343 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1690A11946D68600ED2343 /* UIKit.framework */; };
@@ -42,6 +43,8 @@
 /* Begin PBXFileReference section */
 		62387BB99F6C4A35AA1FC9D2 /* Pods-RottenTomatoes.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RottenTomatoes.xcconfig"; path = "../Pods/Pods-RottenTomatoes.xcconfig"; sourceTree = "<group>"; };
 		90BDFCB7DAA840749605F897 /* libPods-RottenTomatoes.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RottenTomatoes.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF02C7131947DAD7000E6174 /* UIImageView+MHNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+MHNetworking.h"; sourceTree = "<group>"; };
+		BF02C7141947DAD7000E6174 /* UIImageView+MHNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+MHNetworking.m"; sourceTree = "<group>"; };
 		BF16909A1946D68600ED2343 /* RottenTomatoes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RottenTomatoes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF16909D1946D68600ED2343 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BF16909F1946D68600ED2343 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -96,6 +99,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BF02C7121947DA92000E6174 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				BF02C7131947DAD7000E6174 /* UIImageView+MHNetworking.h */,
+				BF02C7141947DAD7000E6174 /* UIImageView+MHNetworking.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 		BF1690911946D68600ED2343 = {
 			isa = PBXGroup;
 			children = (
@@ -131,6 +143,7 @@
 		BF1690A31946D68600ED2343 /* RottenTomatoes */ = {
 			isa = PBXGroup;
 			children = (
+				BF02C7121947DA92000E6174 /* Categories */,
 				BF1690CE1946D6EC00ED2343 /* View Controllers */,
 				BF1690CD1946D6E800ED2343 /* Models */,
 				BF1690CC1946D6DC00ED2343 /* Views */,
@@ -341,6 +354,7 @@
 				BF1690D11946D71E00ED2343 /* Movie.m in Sources */,
 				BF1690AE1946D68600ED2343 /* AppDelegate.m in Sources */,
 				BF1690AA1946D68600ED2343 /* main.m in Sources */,
+				BF02C7151947DAD7000E6174 /* UIImageView+MHNetworking.m in Sources */,
 				BF1690D51946D80500ED2343 /* MoviesTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

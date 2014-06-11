@@ -12,5 +12,6 @@
 @interface MovieTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) Movie *movie;
+- (UIImage *)getCurrentThumbnailImage;
 
 @end

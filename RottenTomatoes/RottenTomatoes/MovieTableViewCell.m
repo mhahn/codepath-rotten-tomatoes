@@ -37,4 +37,8 @@
     [self.movieThumbnailImage setImageWithURL:[NSURL URLWithString:movie.posters[@"detailed"]] withAnimationDuration:0.5];
 }
 
+- (UIImage *)getCurrentThumbnailImage {
+    return self.movieThumbnailImage.image;
+}
+
 @end

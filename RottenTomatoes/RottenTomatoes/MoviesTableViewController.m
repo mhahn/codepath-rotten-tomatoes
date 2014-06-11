@@ -51,7 +51,7 @@
     [self fetchData:nil];
     
     // Configure table cells
-    self.tableView.rowHeight = 150;
+    self.tableView.rowHeight = 175;
     self.tableView.dataSource = self;
     UINib *movieCellNib = [UINib nibWithNibName:@"MovieTableViewCell" bundle:nil];
     [self.tableView registerNib:movieCellNib forCellReuseIdentifier:@"MovieCell"];
@@ -82,8 +82,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    MovieViewController *mvc = [[MovieViewController alloc]initWithNibName:@"MovieViewController" bundle:nil];
+    MovieTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MovieCell" forIndexPath:indexPath];
+    cell.movie = movies[indexPath.row];
+    MovieViewController *mvc = [[MovieViewController alloc]initWithNibName:@"MovieViewController" bundle:nil backgroundImage:[cell getCurrentThumbnailImage]];
     
     // Pass the selected object to the new view controller.
     mvc.movie = movies[indexPath.row];

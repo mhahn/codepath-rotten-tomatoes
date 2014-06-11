@@ -12,5 +12,6 @@
 @interface MovieViewController : UIViewController
 
 @property (weak, nonatomic) Movie *movie;
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil backgroundImage:(UIImage *)backgroundImageOrNil;
 
 @end

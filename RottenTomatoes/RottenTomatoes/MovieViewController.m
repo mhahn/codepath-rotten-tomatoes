@@ -7,10 +7,12 @@
 //
 
 #import "MovieViewController.h"
-#import "UIImageView+MHNetworking.h"
+#import "UIImageView+AFNetworking.h"
 
 
-@interface MovieViewController ()
+@interface MovieViewController () {
+    UIImage *backgroundLoadingImage;
+}
 
 @property (weak, nonatomic) IBOutlet UIImageView *movieBackgroundImageView;
 @property (weak, nonatomic) IBOutlet UILabel *movieTitleLabel;
@@ -23,10 +25,10 @@
 
 @implementation MovieViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil backgroundImage:(UIImage *)backgroundImageOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        backgroundLoadingImage = backgroundImageOrNil;
     }
     return self;
 }
@@ -43,7 +45,8 @@
     self.movieTitleLabel.text = _movie.title;
     self.movieSynopsisLabel.text = _movie.synopsis;
     [self.movieSynopsisLabel sizeToFit];
-    [self.movieBackgroundImageView setImageWithURL:[NSURL URLWithString:_movie.posters[@"original"]] withAnimationDuration:0.025];
+    [self.movieBackgroundImageView setImage:backgroundLoadingImage];
+    [self.movieBackgroundImageView setImageWithURL:[NSURL URLWithString:_movie.posters[@"original"]]];
 }
 
 - (void)didReceiveMemoryWarning {
